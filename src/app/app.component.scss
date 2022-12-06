@@ -1,0 +1,23 @@
+h1 {
+  font-weight: 100;
+}
+
+.left-button {
+  border-right: none;
+}
+
+.right-button {
+  border-left: none;
+}
+
+.green-button {
+  --bs-btn-hover-bg: var(--bs-green);
+}
+
+.red-button {
+  --bs-btn-hover-bg: var(--bs-red);
+}
+
+.indigo-button {
+  --bs-btn-hover-bg: var(--bs-indigo);
+}
