@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TodoService } from './services/todo.service';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { TODO } from './models/todo';
 
 @Component({
@@ -21,6 +21,7 @@ export class AppComponent {
 
   ngOnInit() {
     this.getTodos();
+    this.newTodoForm.controls["content"].addValidators([Validators.minLength(1), Validators.maxLength(254)]);
   }
 
   getTodos() {
@@ -33,6 +34,10 @@ export class AppComponent {
     var content = this.newTodoForm.value.content;
 
     if (!content) {
+      return;
+    }
+
+    if (!this.newTodoForm.valid) {
       return;
     }
 
@@ -56,8 +61,6 @@ export class AppComponent {
 
     todo.completed = true;
 
-    this.todos[indexOfTodo] = todo;
-
     this.service.putTodo(todo).subscribe(response => {
       this.todos[indexOfTodo] = response;
     });
@@ -69,8 +72,18 @@ export class AppComponent {
 
     todo.completed = false;
 
-    this.todos[indexOfTodo] = todo;
+    this.service.putTodo(todo).subscribe(response => {
+      this.todos[indexOfTodo] = response;
+    });
+  }
 
+  saveContent(id: string, content: string) {
+    var indexOfTodo = this.todos.map(obj => obj.id).indexOf(id);
+    var todo = this.todos[indexOfTodo];
+    
+    todo.content = content;
+
+    // this.todos[indexOfTodo] = todo;
 
     this.service.putTodo(todo).subscribe(response => {
       this.todos[indexOfTodo] = response;

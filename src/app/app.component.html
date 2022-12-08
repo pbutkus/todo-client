@@ -10,7 +10,11 @@
           placeholder="New TODO"
           formControlName="content"
         />
-        <button class="btn btn-outline-secondary green-button" type="submit" id="add-new-todo-button">
+        <button
+          class="btn btn-outline-secondary green-button"
+          type="submit"
+          id="add-new-todo-button"
+        >
           <i class="bi bi-plus-lg"></i>
         </button>
       </form>
@@ -21,8 +25,19 @@
       class="list-group-item"
       id="{{ todo.id }}"
     >
-      <p>{{ todo.content }}</p>
-
+      <div class="row">
+        <div class="col">
+          <p>
+            <input
+              #content
+              class="form-control"
+              type="text"
+              value="{{ todo.content }}"
+              disabled
+            />
+          </p>
+        </div>
+      </div>
       <div class="row">
         <div class="col">
           <small class="text-muted align-middle">{{
@@ -30,18 +45,46 @@
           }}</small>
         </div>
         <div class="col text-end">
-          <div class="btn-group btn-group-sm btn-col">
-            <button *ngIf="!todo.completed" class="btn btn-outline-secondary left-button green-button" (click)="markCompleted(todo.id)">
+          <div #controlButtons class="btn-group btn-group-sm btn-col">
+            <button
+              *ngIf="!todo.completed"
+              class="btn btn-outline-secondary left-button green-button"
+              (click)="markCompleted(todo.id)"
+            >
               <i class="bi bi-check-lg"></i>
             </button>
-            <button *ngIf="todo.completed" class="btn btn-outline-secondary left-button red-button" (click)="unmarkCompleted(todo.id)">
+            <button
+              *ngIf="todo.completed"
+              class="btn btn-outline-secondary left-button red-button"
+              (click)="unmarkCompleted(todo.id)"
+            >
               <i class="bi bi-x-lg"></i>
             </button>
-            <button class="btn btn-outline-secondary indigo-button">
+            <button
+              class="btn btn-outline-secondary indigo-button"
+              (click)="content.disabled = false; editButtons.hidden = false; controlButtons.hidden = true"
+            >
               <i class="bi bi-pencil"></i>
             </button>
-            <button class="btn btn-outline-secondary right-button red-button" (click)="deleteTodo(todo.id)">
+            <button
+              class="btn btn-outline-secondary right-button red-button"
+              (click)="deleteTodo(todo.id)"
+            >
               <i class="bi bi-trash3"></i>
+            </button>
+          </div>
+          <div #editButtons class="btn-group btn-group-sm btn-col" hidden>
+            <button
+              class="btn btn-outline-secondary green-button"
+              (click)="content.disabled = true; editButtons.hidden = true; controlButtons.hidden = false; saveContent(todo.id, content.value)"
+            >
+              <i class="bi bi-check-lg"></i>
+            </button>
+            <button
+              class="btn btn-outline-secondary right-button red-button"
+              (click)="content.disabled = true; editButtons.hidden = true; controlButtons.hidden = false; content.value = todo.content"
+            >
+              <i class="bi bi-x-lg"></i>
             </button>
           </div>
         </div>
